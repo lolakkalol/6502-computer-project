@@ -4,6 +4,7 @@
 
 # For compiled 6502 programs
 *.bin
+cc65-snapshot-win32
 
 
 ######################
