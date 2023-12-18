@@ -1,0 +1,4 @@
+{
+    "input": "hello_world_lcd.asm",
+    "params": "--verbose -W2"
+}
