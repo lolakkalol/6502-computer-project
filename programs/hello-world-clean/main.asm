@@ -11,60 +11,67 @@ strHello: .asciiz "Hello, world!"
 lenHello: .byte .STRLEN("Hello, world!")
 
 ; VIA Register addresses
-DDRA = $6003
+;DDRA = $6003
 DDRB = $6002
-IORA = $6001
+;IORA = $6001
 IORB = $6000
 
-; LCD Instruction codes
-CLEAR  = $01
-;RETURN = $02
-DISDCB = $0E
-
-; **************
-; *   SET UP   *
-; **************
+; *************************
+; *   SET UP 4-bit mode   *
+; *************************
 start:
-; Set PA and PB to OUTPUT
+
+; Set DDRB to output
 LDA #$FF
-STA DDRA
 STA DDRB
 
-; Set PA0 HIGH
-LDA #$01
-STA IORA
+; Function set
+LDA #$20 ; pin PB5
+JSR command_LCD
 
-; Clear outputs
+; Function set
+JSR command_LCD ; Repeat previous
+JSR command_LCD ; Repeat previous
+
+; Display on/off control
 LDA #$00
-STA IORA
-STA IORB
+JSR command_LCD
 
-; Clear display
-LDA #CLEAR
-STA IORB
+LDA #$E0 ; pins PB5 PB6 PB7
+JSR command_LCD
 
-JSR toggle_e
-JSR delay
+; Entry mode set
+LDA #$00
+JSR command_LCD
 
-; Set display modes
-LDA #DISDCB
-STA IORB
+LDA #$60 ; pins PB5 PB6
+JSR command_LCD
 
-JSR toggle_e
-JSR delay
 
 ; *******************
 ; * Write to screen *
 ; *******************
 
+; Loop index
 LDX #0
 
 ; Write string strHello to screen
 writeLoop:
+    ; Send first half of command (Upper char bytes)
     LDA strHello, X ; Load the character at address acc + X
-    STA IORB
-    JSR toggle_e_CG
-    JSR delay
+    AND #$F0 ; Set all lower bits to zero
+    ORA #$02 ; Set RS pin
+    JSR command_LCD
+
+    ; Send first half of command (Lower char bytes)
+    LDA strHello, X ; Load the character at address acc + X
+    ASL ; Shift the lower 4 bits up to the higher 4
+    ASL
+    ASL
+    ASL
+    ORA #$02 ; Set RS pin
+    JSR command_LCD
+
     INX
     CPX lenHello
     BNE writeLoop
@@ -75,22 +82,21 @@ inf_loop: JMP inf_loop ; If at end we loop
 ; *   Sub-routines  *
 ; *******************
 
-toggle_e:
+; This sub-routine sends whatever data is in the 
+; accumalator to the LCD.
+command_LCD:
 PHA
-LDA #$20 ; E pin
-STA IORA
-LDA #$00 ; E pin
-STA IORA
-PLA
-RTS
 
-toggle_e_CG:
-PHA
-LDA #$60 ; E pin
-STA IORA
-LDA #$40 ; E pin
-STA IORA
+STA IORB ; Might be able to remove this instruction, test!
+ORA #$08 ; pin E
+STA IORB
+LDA #$00 ; Setting all data to 0 should be fine...
+STA IORB
+
 PLA
+
+JSR delay
+
 RTS
 
 delay:
@@ -105,6 +111,32 @@ LDX #$FF      ; 2
 
 TAX ; Transer index X from acumalator
 PLA ; Pull acumalator from stack
+RTS
+
+; 1  2  4  8 10  20  40  80
+; NC RS RW E PB4 PB5 PB6 PB7
+
+; Sets 6502 zeroflag if the busy flag from the LCD is set
+; Not working :(
+get_LCD_BF:
+
+; Set data pins to inputs zero their register
+LDA #$0F
+STA DDRB
+LDA #$4 ; Set pin RW
+
+; Read busy flag
+LDA IORB ; Will also get that pin RW is SET!!
+AND #$80 ; PB7
+CMP #$80 
+
+; Set zero flag if BF set
+
+
+; Set data on bus to zero
+
+; Change PB4-7 to output
+
 RTS
 
 .segment "PC_START"

@@ -1,6 +1,6 @@
 # Linker and compiler used
-CC="C:\Users\COMPUTER\Documents\6502-computer\cc65-snapshot-win32\bin\ca65"
-LD="C:\Users\COMPUTER\Documents\6502-computer\cc65-snapshot-win32\bin\ld65"
+CC=ca65
+LD=ld65
 
 # build dir
 dir=./build
