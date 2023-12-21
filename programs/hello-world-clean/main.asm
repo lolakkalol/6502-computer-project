@@ -20,32 +20,7 @@ IORB = $6000
 ; *   SET UP 4-bit mode   *
 ; *************************
 start:
-
-; Set DDRB to output
-LDA #$FF
-STA DDRB
-
-; Function set
-LDA #$20 ; pin PB5
-JSR command_LCD
-
-; Function set
-JSR command_LCD ; Repeat previous
-JSR command_LCD ; Repeat previous
-
-; Display on/off control
-LDA #$00
-JSR command_LCD
-
-LDA #$E0 ; pins PB5 PB6 PB7
-JSR command_LCD
-
-; Entry mode set
-LDA #$00
-JSR command_LCD
-
-LDA #$60 ; pins PB5 PB6
-JSR command_LCD
+JSR setup_up_LCD
 
 
 ; *******************
@@ -54,6 +29,9 @@ JSR command_LCD
 
 ; Loop index
 LDX #0
+
+; 1  2  4  8 10  20  40  80
+; NC RS RW E PB4 PB5 PB6 PB7
 
 ; Write string strHello to screen
 writeLoop:
@@ -81,6 +59,35 @@ inf_loop: JMP inf_loop ; If at end we loop
 ; *******************
 ; *   Sub-routines  *
 ; *******************
+
+setup_up_LCD:
+; Set DDRB to output
+LDA #$FF
+STA DDRB
+
+; Function set
+LDA #$20 ; pin PB5
+JSR command_LCD
+
+; Function set
+JSR command_LCD ; Repeat previous
+JSR command_LCD ; Repeat previous
+
+; Display on/off control
+LDA #$00
+JSR command_LCD
+
+LDA #$E0 ; pins PB5 PB6 PB7
+JSR command_LCD
+
+; Entry mode set
+LDA #$00
+JSR command_LCD
+
+LDA #$60 ; pins PB5 PB6
+JSR command_LCD
+
+RTS
 
 ; This sub-routine sends whatever data is in the 
 ; accumalator to the LCD.
