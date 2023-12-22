@@ -15,12 +15,31 @@
 ;  +----------------+
 ;  |  LOAD SEGMENT  |
 ;  +================+
-
+;
+; Description: Loads the DATA segment into RAM. Currently 
+; only handels one page of memory, i.e. $FF.
 .segment "LOAD"
 
-; Add code to load DATA section
+LDX #.LOBYTE(__DATA_SIZE__)
+LDY #.HIBYTE(__DATA_SIZE__)
 
-jmp __CODE_RUN__
+; Stop execution if DATA section is over 255 bytes
+inf: BNE inf
+
+; Skip copying if low byte is zero
+CPX #$0
+BEQ LOAD_END
+
+; Copy DATA in rom to DATA in RAM
+cp_loop:
+    DEX
+    LDA __DATA_LOAD__, X  ; Loads the DATA at DATA_ROM + X
+    STA __DATA_RUN__, X   ; Stores the DATA at DATA_RAM + X
+    CPX #$0
+    BNE cp_loop
+
+; Jump to main code
+LOAD_END: jmp __CODE_RUN__
 
 
 ;  +----------------+
