@@ -1,4 +1,7 @@
-; Description: 
+; Description: This is an example file demonstrating how
+; libraries can be constructed in CA65 assembler.
+
+; Sub-routine ADD_TWO
 ; INPUT : Accumulator, value to add two to
 ; OUTPUT: Accumulator, the value increamented by two
 .export add_two
