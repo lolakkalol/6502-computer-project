@@ -15,10 +15,22 @@
 .segment "DATA"
 Number: .byte $12, $34, $56
 
+;  +------------------+
+;  |  RODATA SEGMENT  |
+;  +==================+
+;
+; Description: Add static data here. This data will be
+; located inside the ROM.
+.segment "RODATA"
+RONumber: .byte $AB, $CD, $EF
+
 ;  +----------------+
 ;  |  CODE SEGMENT  |
 ;  +================+
-
+;
+; Description: This section contains all of the "main" code,
+; this will be the first executable code (After the copy of
+; DATA into RAM in LOAD section).
 .segment "CODE"
 
 ; Load number from RAM
