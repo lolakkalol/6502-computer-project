@@ -12,12 +12,20 @@
 .import __DATA_RUN__
 .import __DATA_SIZE__
 
+;  +----------------+
+;  |  LOAD SEGMENT  |
+;  +================+
+
 .segment "LOAD"
 
 ; Add code to load DATA section
 
 jmp __CODE_RUN__
 
+
+;  +----------------+
+;  |  RESET VECTOR  |
+;  +================+
 
 .segment "PC_START"
 .WORD __LOAD_RUN__

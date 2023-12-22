@@ -5,6 +5,10 @@
 ; imports
 .import add_two
 
+;  +----------------+
+;  |  CODE SEGMENT  |
+;  +================+
+
 .segment "CODE"
 
 LDA #100
