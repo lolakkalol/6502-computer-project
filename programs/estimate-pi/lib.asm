@@ -163,10 +163,13 @@ RTS
 ; INPUT : None.
 ; OUTPUT: FLOAT_A = FLOAT_A + FLOAT_B. Destroys FLOAT_B
 ;
-; The expected Float data format (Packed)
+; The packed Float data format
 ; Address : low ------------------------------------ high :
 ; Data    : 23 bit mantissa : 8 bit exponent : 1 bit sign :
 ;
+; The expected Float data format (Unpacked) 
+; Adr  : low --------------------------------------- high :
+; Data : 3 bytes mantissa : 1 byte exponent : 1 byte sign :
 
 .export FADD32A
 .proc FADD32A
@@ -182,8 +185,8 @@ A_SMALLER:    ; Float_A was smaller, shift mantis until the
 LSR FLOAT_A+2 ; same exponent as FLOAT_B can be used.
 ROR FLOAT_A+1
 ROR FLOAT_A
-DEC
-INC FLOAT_A
+INC FLOAT_A+3
+INC
 BNE A_SMALLER
 JMP MANTIS_SHIFT_END
 
@@ -192,8 +195,8 @@ B_SMALLER:
 LSR FLOAT_B+2
 ROR FLOAT_B+1
 ROR FLOAT_B
+INC FLOAT_B+3
 DEC
-INC FLOAT_B
 BNE B_SMALLER
 
 MANTIS_SHIFT_END:
@@ -223,11 +226,13 @@ LDA FLOAT_B+4   ; Test sign bit
 BEQ FLOAT_B_POS ; Take two's complement of FLOAT_B
 LDA FLOAT_B
 EOR #$FF
+CLC
 ADC #1
 STA FLOAT_B
 LDA FLOAT_B+1
 EOR #$FF
-ADC #0
+CLC
+ADC #1
 STA FLOAT_B+1
 LDA FLOAT_B+2
 EOR #$FF
@@ -261,6 +266,19 @@ JMP DONE
 NEG:
 LDA #1
 STA FLOAT_A+4
+SEC
+LDA FLOAT_A
+SBC #1
+EOR #$FF
+STA FLOAT_A
+LDA FLOAT_A+1
+SBC #0
+EOR #$FF
+STA FLOAT_A+1
+LDA FLOAT_A+2
+SBC #0
+EOR #$FF
+STA FLOAT_A+2
 JMP DONE
 
 SAME:
@@ -271,6 +289,26 @@ ROR FLOAT_A
 INC FLOAT_A+3
 
 DONE:
+LDA FLOAT_A    ; Check if result was zero and set exponent 
+BNE Normalize  ; to zero if that is the case, then jump
+LDA FLOAT_A+1  ; to end.
+BNE Normalize
+LDA FLOAT_A+2
+BNE Normalize
+STA FLOAT_A+3
+JMP DONE2
+
+Normalize:
+LDA FLOAT_A+2 ; Moves the highest 1 to bit 7 of +3 if needed
+AND #$80
+BNE DONE2
+ASL FLOAT_A   ; This needs to be tested
+ROL FLOAT_A+1
+ROL FLOAT_A+2
+DEC FLOAT_A+3
+JMP Normalize
+
+DONE2:
 
 PLA
 RTS
