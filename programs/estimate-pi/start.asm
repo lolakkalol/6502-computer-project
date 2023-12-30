@@ -29,7 +29,7 @@
 ; :------------------------------:
 
 LDX #.LOBYTE(__DATA_SIZE__)
-LDY #.HIBYTE(__DATA_SIZE__)
+LDA #.HIBYTE(__DATA_SIZE__)
 
 ; Stop execution if DATA section is over 255 bytes
 inf: BNE inf
@@ -53,9 +53,9 @@ DATA_LOAD_END:
 ; :----------------------------:
 
 LDX #.LOBYTE(__ZEROPAGE_SIZE__)
-LDY #.HIBYTE(__ZEROPAGE_SIZE__)
+LDA #.HIBYTE(__ZEROPAGE_SIZE__)
 
-; Stop execution if DATA section is over 255 bytes
+; Stop execution if ZP section is over 255 bytes
 BNE inf
 
 ; Skip copying if low byte is zero
