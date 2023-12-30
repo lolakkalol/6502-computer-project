@@ -40,6 +40,13 @@ A16:  .WORD 0
 FLOAT_A: .BYTE 0, 0, 0, 0, 0
 FLOAT_B: .BYTE 0, 0, 0, 0, 0
 
+; Exception flags for IEEE754
+; These flags are only lowered by the request of the user
+; and raised by the floating point operations.
+; | LSB <--------------------------- Bits --------------------------> MSB |
+; | Invalid operation | Division by zero | Overflow | Underflow | Inexact |
+FLOAT_STATUS: .BYTE $00
+
 ;  +------------------+
 ;  |  RODATA SEGMENT  |
 ;  +==================+
