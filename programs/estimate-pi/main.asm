@@ -5,16 +5,13 @@
 ;  +-----------+
 ;  |  IMPORTS  |
 ;  +===========+
-;.import LSR32A
-;.import LDA32I
-.import FADD32A
-.import LF32A
-.import LF32B
+.import ADD_STAGED_FLOATS
+.import roundTiesToEven
 
 ;  +-----------+
 ;  |  EXPORTS  |
 ;  +===========+
-.export A32, B32, A16, FLOAT_A, FLOAT_B
+.export A32, B32, A16, FLOAT_A, FLOAT_B, FLOAT_STATUS
 
 ;  +----------------+
 ;  |  DATA SEGMENT  |
@@ -35,10 +32,10 @@
 A32:  .DWORD $41200000
 B32:  .DWORD $C1300000
 A16:  .WORD 0
-; Unpacked 32 bit float
-; | 3 Bytes mantissa | 1 Byte exponent | 1 Byte sign (+/-) |
-FLOAT_A: .BYTE 0, 0, 0, 0, 0
-FLOAT_B: .BYTE 0, 0, 0, 0, 0
+; Unpacked binary32 IEEE754 float
+; | 4 Bytes mantissa | 1 Byte exponent | 1 Byte sign (+/-) |
+FLOAT_A: .BYTE 0, 0, 0, 1, $FF, 1
+FLOAT_B: .BYTE 34, 63, 1, 32, $35, 1
 
 ; Exception flags for IEEE754
 ; These flags are only lowered by the request of the user
@@ -66,11 +63,7 @@ FLOAT_STATUS: .BYTE $00
 
 ; MAIN SEGMENT :D
 
-LDA #A32
-JSR LF32A
-LDA #B32
-JSR LF32B
-JSR FADD32A
+JSR ADD_STAGED_FLOATS
 
 ; Stop the program from progressing further
 END_: JMP END_
