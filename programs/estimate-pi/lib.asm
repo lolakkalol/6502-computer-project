@@ -112,7 +112,7 @@ RTS
 .endproc
 
 ;  +-------------------------------+
-;  |  ADD_STAGED_FLOATS SUB-ROUTINE  |
+;  | ADD_STAGED_FLOATS SUB-ROUTINE |
 ;  +===============================+
 ; DESC  : Add the two unpacked floats, FLOAT_A and FLOAT_B. 
 ; Is able to handle negative floats.
@@ -216,9 +216,9 @@ BMI SHIFT_LOGIC; Branch if FALSE
 
 ; FLOAT_A exponent - FLOAT_B exponent IS possitive
 ADC #32
-BMI ADD_STAGED_FLOATS_RET
+BMI ADD_STAGED_FLOATS_RET_INTER
 JSR MOV_FLOAT_B_TO_A ; Move FLOAT_B to FLOAT_A
-JMP ADD_STAGED_FLOATS_RET
+JMP ADD_STAGED_FLOATS_RET_INTER
 
 SHIFT_LOGIC:
 ADC #32 ; Get back difference between FLOAT_A expo and FLOAT_B
@@ -296,17 +296,24 @@ EOR #$FF
 ADC #0
 STA FLOAT_B+m3
 
+JMP END_TWO_COMPLEMENT
+ADD_STAGED_FLOATS_RET_INTER: JMP ADD_STAGED_FLOATS_RET ; Page boundry
+
 END_TWO_COMPLEMENT:
 ; FLOAT_A mantissa += FLOAT_B mantissa
 CLC
 LDA FLOAT_A+m0
 ADC FLOAT_B+m0
+STA FLOAT_A+m0
 LDA FLOAT_A+m1
 ADC FLOAT_B+m1
+STA FLOAT_A+m1
 LDA FLOAT_A+m2
 ADC FLOAT_B+m2
+STA FLOAT_A+m2
 LDA FLOAT_A+m3
 ADC FLOAT_B+m3
+STA FLOAT_A+m3
 
 ; --- Post calculation checks ---
 BCS MANTISSA_ADD_CARRIED ; Float mantissa addition carried
@@ -318,21 +325,23 @@ BEQ ROUND_FLOAT
 ; Negate two's complement
 SEC
 LDA FLOAT_A+m0
-EOR #$FF
 SBC #1
+EOR #$FF
 STA FLOAT_A+m0
 LDA FLOAT_A+m1
-EOR #$FF
 SBC #0
+EOR #$FF
 STA FLOAT_A+m1
 LDA FLOAT_A+m2
-EOR #$FF
 SBC #0
+EOR #$FF
 STA FLOAT_A+m2
 LDA FLOAT_A+m3
-EOR #$FF
 SBC #0
+EOR #$FF
 STA FLOAT_A+m3
+LDA #1
+STA FLOAT_A+s0
 JMP ROUND_FLOAT
 
 MANTISSA_ADD_CARRIED:
