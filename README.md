@@ -242,9 +242,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Alexander Stenlund -  alexander.stenlund@telia.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/lolakkalol/6502-computer-project](https://github.com/lolakkalol/6502-computer-project)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -253,16 +253,9 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+* [6502 Primer](https://wilsonminesco.com/6502primer/)
+* [6502 forum](http://forum.6502.org/viewtopic.php?t=1064&start=105)
+* [65SIB](http://forum.6502.org/viewtopic.php?t=1064&start=105)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -270,15 +263,15 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/lolakkalol/6502-computer-project.svg?style=for-the-badge
 [contributors-url]: https://github.com/lolakkalol/6502-computer-project/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/lolakkalol/6502-computer-project.svg?style=for-the-badge
 [forks-url]: https://github.com/lolakkalol/6502-computer-project/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/lolakkalol/6502-computer-project.svg?style=for-the-badge
 [stars-url]: https://github.com/lolakkalol/6502-computer-project/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/lolakkalol/6502-computer-project.svg?style=for-the-badge
 [issues-url]: https://github.com/lolakkalol/6502-computer-project/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/lolakkalol/6502-computer-project.svg?style=for-the-badge
 [license-url]: https://github.com/lolakkalol/6502-computer-project/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
