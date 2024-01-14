@@ -112,6 +112,117 @@ RTS
 .endproc
 
 ;  +-------------------------------+
+;  | UNPACK32_TO_FLOAT_A SUB-ROUTINE |
+;  +===============================+
+; DESC  : Unpacks a 32 bit floating point number into FLOAT_A accumalator from
+; the address in registers X (Low byte) and Y (High byte). 
+; OBS! Uses and destroys A16
+; INPUT : Index reg X(Low byte) and Y (High byte)
+; OUTPUT: FLOAT_A = LOAD (X, Y)
+;
+
+.export UNPACK32_TO_FLOAT_A
+.proc UNPACK32_TO_FLOAT_A
+STX A16
+STY A16+1
+
+PHA
+PHY
+; Get and set sign bit
+STZ FLOAT_A+s0  ; Set sign byte to zero
+LDY #3
+LDA (A16), Y     ; Test highest bit (sign)
+BPL POSSITIVE
+SMB0 FLOAT_A+s0 ; Set sign bit if negative
+POSSITIVE:
+
+; Get and set exponent
+ASL             ; Shift out sign bit
+STA FLOAT_A+e0
+LDY #2
+LDA (A16), Y     ; Test highest bit in the next byte as it belongs to the exponent
+BPL SKIP       ; If highest bit is not set skip setting it as it is shall be zero
+SMB0 FLOAT_A+e0
+SKIP:
+
+; Get and set mantissa
+STZ FLOAT_A+m0
+LDA (A16)
+STA FLOAT_A+m1
+LDY #1
+LDA (A16), Y
+STA FLOAT_A+m2
+LDY #2
+LDA (A16), Y
+ORA #$80        ; Set implicit bit
+STA FLOAT_A+m3
+
+LDA FLOAT_A+e0   ; Check if subnormal
+BNE NOT_SUBNORMAL
+SMB7 FLOAT_A+m3  ; Un-set implicit bit
+NOT_SUBNORMAL:
+
+PLY
+PLA
+RTS
+.endproc
+
+;  +-------------------------------+
+;  | UNPACK32_TO_FLOAT_B SUB-ROUTINE |
+;  +===============================+
+; DESC  : Unpacks a 32 bit floating point number into FLOAT_B accumalator from
+; the address in registers X (Low byte) and Y (High byte).
+; INPUT : Index reg X(Low byte) and Y (High byte)
+; OUTPUT: FLOAT_B = LOAD (X, Y)
+;
+
+.export UNPACK32_TO_FLOAT_B
+.proc UNPACK32_TO_FLOAT_B
+STX A16
+STY A16+1
+
+PHA
+PHY
+; Get and set sign bit
+STZ FLOAT_B+s0  ; Set sign byte to zero
+LDY #3
+LDA (A16), Y     ; Test highest bit (sign)
+BPL POSSITIVE
+SMB0 FLOAT_B+s0 ; Set sign bit if negative
+POSSITIVE:
+
+; Get and set exponent
+ASL             ; Shift out sign bit
+STA FLOAT_B+e0
+LDY #2
+LDA (A16), Y     ; Test highest bit in the next byte as it belongs to the exponent
+BPL SKIP       ; If highest bit is not set skip setting it as it is shall be zero
+SMB0 FLOAT_B+e0
+SKIP:
+
+; Get and set mantissa
+STZ FLOAT_B+m0
+LDA (A16)
+STA FLOAT_B+m1
+LDY #1
+LDA (A16), Y
+STA FLOAT_B+m2
+LDY #2
+LDA (A16), Y
+ORA #$80        ; Set implicit bit
+STA FLOAT_B+m3
+
+LDA FLOAT_B+e0   ; Check if subnormal
+BNE NOT_SUBNORMAL
+SMB7 FLOAT_B+m3  ; Un-set implicit bit
+NOT_SUBNORMAL:
+
+PLY
+PLA
+RTS
+.endproc
+
+;  +-------------------------------+
 ;  | ADD_STAGED_FLOATS SUB-ROUTINE |
 ;  +===============================+
 ; DESC  : Add the two unpacked floats, FLOAT_A and FLOAT_B. 
