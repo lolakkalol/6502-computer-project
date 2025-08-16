@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "6502-and-friends")(type "KiCad")(uri "C:/Users/CP/Documents/projects/6502-computer-project/6502-and-friends/6502-and-friends.pretty")(options "")(descr ""))
+)
