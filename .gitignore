@@ -41,4 +41,5 @@ fp-info-cache
 
 # Lock files
 *.lck
+*.kicad_sch.lck
 
